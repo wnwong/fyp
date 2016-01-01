@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.user.secondhandtradingplatform.Add_Gadget_Activity;
 import com.example.user.secondhandtradingplatform.Login;
 import com.example.user.secondhandtradingplatform.R;
+import com.example.user.secondhandtradingplatform.Register;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -137,6 +138,9 @@ public class Main extends AppCompatActivity
             startActivity(myIntent);
             finish();
         } else if (id == R.id.nav_send) {
+            Intent myIntent = new Intent(this, Register.class);
+            startActivity(myIntent);
+            finish();
 
         }
         if (fragment != null) {
