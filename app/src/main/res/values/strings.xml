@@ -22,11 +22,15 @@
     </string-array>
 
     <!--User Information (Used in Register.java) -->
-    <string name="username">Username</string>
-    <string name="pwd">Password</string>
-    <string name="email">Email</string>
-    <string name="location">Location</string>
-    <string name="register">Register</string>
+    <string name="username">用户名稱</string>
+    <string name="pwd">密碼</string>
+    <string name="email">電郵地址</string>
+    <string name="location">最方便交易地點</string>
+    <string name="register">註冊</string>
+    <string name="confirm">確認密碼</string>
+    <string name="gender">性別</string>
+    <string name="female">女性</string>
+    <string name="male">男性</string>
 
     <string name="title_Camera">Camera</string>
     <string name="title_Tablet">Tablet</string>

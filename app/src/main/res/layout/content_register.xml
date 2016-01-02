@@ -41,11 +41,31 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/r_pwd"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/r_uname"
         android:layout_alignLeft="@+id/r_uname"
         android:layout_alignStart="@+id/r_uname"
         android:password="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:id="@+id/confirm"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/r_confirm"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/pwd" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/r_confirm"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/r_pwd"
+        android:layout_alignLeft="@+id/r_pwd"
+        android:layout_alignStart="@+id/r_pwd" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,15 +76,15 @@
         android:layout_alignBaseline="@+id/r_email"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/pwd"/>
+        android:layout_below="@+id/confirm"/>
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/r_email"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/r_pwd"
-        android:layout_alignLeft="@+id/r_pwd"
-        android:layout_alignStart="@+id/r_pwd" />
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/r_confirm"
+        android:layout_alignLeft="@+id/r_confirm"
+        android:layout_alignStart="@+id/r_confirm" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -82,14 +102,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/r_location"
         android:layout_below="@+id/r_email"
-        android:layout_alignLeft="@+id/r_email"
-        android:layout_alignStart="@+id/r_email"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/location"
+        android:layout_toEndOf="@+id/location" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/r_location"
+        android:layout_below="@+id/rgroup"
         android:layout_marginTop="30dp"
         android:text="@string/register"
         android:background="@color/colorPrimaryDark"
@@ -97,4 +117,41 @@
         android:id="@+id/regBtn"
         android:clickable="true"
         android:elevation="8dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gender"
+        android:textSize="20sp"
+        android:layout_below="@+id/location"
+        android:layout_toLeftOf="@+id/rgroup"
+        android:layout_alignBaseline="@+id/rgroup"
+        android:layout_alignLeft="@+id/location"
+        android:layout_marginTop="20dp"
+        android:id="@+id/gender"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rgroup"
+        android:orientation="horizontal"
+        android:layout_below="@+id/r_location"
+        android:layout_alignLeft="@+id/r_location">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/male"
+            android:id="@+id/mButton"
+            android:textSize="20sp"
+            android:clickable="true" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/female"
+            android:id="@+id/fButton"
+            android:textSize="20sp"
+            android:clickable="true" />
+
+    </RadioGroup>
+
 </RelativeLayout>
