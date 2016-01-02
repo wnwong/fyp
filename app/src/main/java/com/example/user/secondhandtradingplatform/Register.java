@@ -45,6 +45,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         reg.setOnClickListener(this);
         male.setOnClickListener(this);
         female.setOnClickListener(this);
+        rgroup.setOnCheckedChangeListener(listener);
     }
     @Override
     public void onClick(View v) {
