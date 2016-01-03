@@ -15,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import activity.Main;
+import server.GetUserCallback;
+import server.ServerRequests;
 import user.User;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
@@ -57,11 +59,21 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 String rEmail = email.getText().toString();
                 String rLocation = location.getText().toString();
 
-
-                User user = new User(rUsername, rPassword, rEmail, rLocation);
-               // registerUser(user);
+                User user = new User(rUsername, rPassword, rEmail, rLocation, gender);
+                registerUser(user);
                 break;
         }
+    }
+
+    private void registerUser(User user){
+        ServerRequests serverRequests = new ServerRequests(this);
+        serverRequests.storeUserDataInBackground(user, new GetUserCallback() {
+            @Override
+            public void done(User returnedUser) {
+                Intent loginIntent = new Intent(Register.this, Login.class);
+                startActivity(loginIntent);
+            }
+        });
     }
     @Override
     public void onBackPressed() {
@@ -82,23 +94,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-        private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener(){
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int p = group.indexOfChild((RadioButton) findViewById(checkedId));
-                int count = group.getChildCount();
-                switch (checkedId){
-                    case R.id.mButton:
-                        gender = "male";
-                        Toast.makeText(getApplicationContext(), "Male button is selected!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.fButton:
-                        gender = "female";
-                        Toast.makeText(getApplicationContext(), "Female button is selected!", Toast.LENGTH_SHORT).show();
-                        break;
+    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            int p = group.indexOfChild((RadioButton) findViewById(checkedId));
+            int count = group.getChildCount();
+            switch (checkedId){
+                case R.id.mButton:
+                    gender = "male";
+                    break;
+                case R.id.fButton:
+                    gender = "female";
+                    break;
                 }
             }
         };

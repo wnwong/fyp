@@ -3,21 +3,21 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_camara" android:icon="@android:drawable/ic_menu_camera"
-            android:title="Cameras" />
-        <item android:id="@+id/nav_gallery" android:icon="@android:drawable/ic_menu_gallery"
-            android:title="Tablets" />
-        <item android:id="@+id/nav_slideshow" android:icon="@android:drawable/ic_menu_slideshow"
+            android:title="@string/title_Camera" />
+        <item android:id="@+id/nav_tablet" android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/title_Tablet" />
+        <item android:id="@+id/nav_smartphone" android:icon="@android:drawable/ic_menu_slideshow"
             android:title="Smartphones" />
-        <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
+        <item android:id="@+id/nav_games" android:icon="@android:drawable/ic_menu_manage"
             android:title="Video Games" />
     </group>
 
     <item android:title="Member Area">
         <menu>
-            <item android:id="@+id/nav_share" android:icon="@android:drawable/ic_menu_share"
-                android:title="Login" />
-            <item android:id="@+id/nav_send" android:icon="@android:drawable/ic_menu_send"
-                android:title="Register" />
+            <item android:id="@+id/nav_login" android:icon="@android:drawable/ic_menu_share"
+                android:title="@string/title_activity_login" />
+            <item android:id="@+id/nav_register" android:icon="@android:drawable/ic_menu_send"
+                android:title="@string/title_activity_register" />
         </menu>
     </item>
 

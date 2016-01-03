@@ -1,5 +1,6 @@
 package com.example.user.secondhandtradingplatform;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import activity.Main;
+import server.GetUserCallback;
+import server.ServerRequests;
 import user.User;
 import user.UserLocalStore;
 
@@ -70,17 +73,35 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 String password = pwd.getText().toString();
 
                 User user = new User (username, password);
+                // Check if username and password are correct
                 authenticate(user);
         }
     }
 
     private void authenticate(User user){
-
+        ServerRequests serverRequests = new ServerRequests(this);
+        serverRequests.fetchUserDataInBackground(user, new GetUserCallback() {
+            @Override
+            public void done(User returnedUser) {
+                if(returnedUser == null){
+                    showErrorMessage();
+                }else{
+                    logUserIn(returnedUser);
+                }
+            }
+        });
     }
 
     private void logUserIn(User returnedUser){
         userLocalStore.storeUserData(returnedUser);
         userLocalStore.setUserLoggedIn(true);
         startActivity(new Intent(this, Main.class));
+    }
+
+    private void showErrorMessage(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Login.this);
+        dialogBuilder.setMessage("Incorrect user details");
+        dialogBuilder.setPositiveButton("OK", null);
+        dialogBuilder.show();
     }
 }

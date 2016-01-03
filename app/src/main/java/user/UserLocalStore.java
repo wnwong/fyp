@@ -17,6 +17,7 @@ public class UserLocalStore {
         spEditor.putString("password", user.password);
         spEditor.putString("email", user.email);
         spEditor.putString("location", user.location);
+        spEditor.putString("gender", user.gender);
         spEditor.commit();
     }
 
@@ -28,9 +29,9 @@ public class UserLocalStore {
         String password = userLocalDatabase.getString("password", "");
         String email = userLocalDatabase.getString("email", "");
         String location = userLocalDatabase.getString("location", "");
+        String gender = userLocalDatabase.getString("gender", "");
 
-        User storedUser = new User(username, password, email, location);
-        return storedUser;
+        return new User(username, password, email, location, gender);
     }
 
     public void setUserLoggedIn(boolean loggedIn){

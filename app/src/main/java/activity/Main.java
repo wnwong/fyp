@@ -127,17 +127,17 @@ public class Main extends AppCompatActivity
             fragment = new CameraFragment();
             title = getString(R.string.title_Camera);
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_tablet) {
             title = getString(R.string.title_Tablet);
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_smartphone) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_games) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_login) {
             Intent myIntent = new Intent(this, Login.class);
             startActivity(myIntent);
             finish();
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_register) {
             Intent myIntent = new Intent(this, Register.class);
             startActivity(myIntent);
             finish();
