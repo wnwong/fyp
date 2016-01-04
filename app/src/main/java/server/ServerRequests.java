@@ -4,7 +4,9 @@ package server;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -24,13 +26,14 @@ import user.User;
 public class ServerRequests {
     ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
-    public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
+    public static final String SERVER_ADDRESS = /*"http://php-etrading.rhcloud.com/"*/ "http://shtrade.net16.net/";
 
     public ServerRequests(Context context){
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Processing");
         progressDialog.setMessage("Please wait...");
+
     }
 
     public void storeUserDataInBackground(User user, GetUserCallback userCallback){
@@ -53,6 +56,7 @@ public class ServerRequests {
         }
         @Override
         protected Void doInBackground(Void... params) {
+            HttpURLConnection con = null;
             //Data to be sent to the Server
             Map<String,String> dataToSend = new HashMap<>();
             dataToSend.put("username", user.getUsername());
@@ -61,23 +65,44 @@ public class ServerRequests {
             dataToSend.put("location", user.getLocation());
             dataToSend.put("gender", user.getGender());
 
+            //Encoded String
             String encodedStr = getEncodedData(dataToSend);
 
             try{
                 //Conerting address String to URL
                 URL url = new URL(SERVER_ADDRESS + "Register.php");
                 //Opening the connection
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                 con = (HttpURLConnection) url.openConnection();
                 //POST method
                 con.setRequestMethod("POST");
                 //To enable inputting values using POST method
                 con.setDoOutput(true);
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("username", user.getUsername())
+                        .appendQueryParameter("password", user.getPassword())
+                        .appendQueryParameter("email", user.getEmail())
+                        .appendQueryParameter ("location", user.getLocation())
+                        .appendQueryParameter("gender", user.getGender());
+                String query = builder.build().getEncodedQuery();
+
                 OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
                 //Write dataToSend to OutputStreamWriter
-                writer.write(encodedStr);
+                writer.write(query);
+                System.out.println("encodedStr:" + query);
                 writer.flush();
+                writer.close();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line;
+                while ((line = reader.readLine())!= null){
+                    System.out.println(line);
+                }
             }catch(Exception e){
                 e.printStackTrace();
+            }finally {
+                if(con != null){
+                    con.disconnect();
+                }
             }
             return null;
         }
@@ -118,6 +143,8 @@ public class ServerRequests {
 
         @Override
         protected User doInBackground(Void... params) {
+            System.out.println("doing in background");
+            HttpURLConnection con = null;
             Map<String,String> dataToSend = new HashMap<>();
             dataToSend.put("username", user.getUsername());
             dataToSend.put("password", user.getPassword());
@@ -128,8 +155,10 @@ public class ServerRequests {
             try{
                 //Conerting address String to URL
                 URL url = new URL(SERVER_ADDRESS + "FetchUserData.php");
+
                 //Opening the connection
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                 con = (HttpURLConnection) url.openConnection();
+                System.out.println("httpconnection is opened");
                 //POST method
                 con.setRequestMethod("POST");
                 //To enable inputting values using POST method
@@ -137,6 +166,7 @@ public class ServerRequests {
                 OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
                 //Write dataToSend to OutputStreamWriter
                 writer.write(encodedStr);
+                Log.i("Writer Output", encodedStr);
                 writer.flush();
                 StringBuilder sb = new StringBuilder();
                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -144,8 +174,13 @@ public class ServerRequests {
                 while((line = reader.readLine()) != null){
                     sb.append(line + "\n");
                 }
-                line = sb.toString();
-                JSONObject jObject = new JSONObject(line);
+                String json = sb.toString();
+
+                Log.i("custom_check", "The values received in the login part are as follows:");
+                Log.i("custom_check",json);
+                reader.close();
+
+                JSONObject jObject = new JSONObject(json);
 
                 if(jObject.length() == 0){
                     returnedUser = null;
@@ -159,6 +194,10 @@ public class ServerRequests {
                 }
             }catch(Exception e){
                 e.printStackTrace();
+            }finally{
+                if(con != null){
+                    con.disconnect();
+                }
             }
             return returnedUser;
         }
