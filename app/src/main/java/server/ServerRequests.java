@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -181,20 +182,26 @@ public class ServerRequests {
                 String json = sb.toString();
 
                 Log.i("custom_check", "The values received in the login part are as follows:");
-                Log.i("custom_check",json);
-                reader.close();
+                Log.i("custom_check", json);
 
                 JSONObject jObject = new JSONObject(json);
+             //   JSONArray array = new JSONArray(json);
+            //    JSONArray arr = jObject.getJSONArray("return_arr");
 
                 if(jObject.length() == 0){
                     returnedUser = null;
+                    Log.i("custom_check", "No returnedUser!! ");
                 }else{
-                    //Retrieve the other information back
-                    String email = jObject.getString("email");
-                    String location = jObject.getString("location");
-                    String gender = jObject.getString("gender");
-
+                    String email = null;
+                    String location = null;
+                    String gender = null;
+                         email = jObject.getString("email");
+                         location = jObject.getString("location");
+                         gender = jObject.getString("gender");
+                    Log.i("custom_check", "the parsed JSON info are as follows:");
+                    Log.i("custom_check", email + " " + location + " " +gender);
                     returnedUser = new User(user.getUsername(), user.getPassword(), email, location, gender);
+                    reader.close();
                 }
             }catch(Exception e){
                 e.printStackTrace();
