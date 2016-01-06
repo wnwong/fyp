@@ -10,7 +10,9 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -26,7 +28,7 @@ import user.User;
 public class ServerRequests {
     ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
-    public static final String SERVER_ADDRESS = /*"http://php-etrading.rhcloud.com/"*/ "http://shtrade.net16.net/";
+    public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
 
     public ServerRequests(Context context){
         progressDialog = new ProgressDialog(context);
@@ -70,13 +72,15 @@ public class ServerRequests {
 
             try{
                 //Conerting address String to URL
-                URL url = new URL(SERVER_ADDRESS + "Register.php");
+                URL url = new URL(SERVER_ADDRESS + "test.php");
                 //Opening the connection
                  con = (HttpURLConnection) url.openConnection();
+
                 //POST method
                 con.setRequestMethod("POST");
                 //To enable inputting values using POST method
                 con.setDoOutput(true);
+                con.setDoInput(true);
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("username", user.getUsername())
                         .appendQueryParameter("password", user.getPassword())
@@ -91,12 +95,6 @@ public class ServerRequests {
                 System.out.println("encodedStr:" + query);
                 writer.flush();
                 writer.close();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String line;
-                while ((line = reader.readLine())!= null){
-                    System.out.println(line);
-                }
             }catch(Exception e){
                 e.printStackTrace();
             }finally {
