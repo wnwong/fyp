@@ -95,6 +95,12 @@ public class ServerRequests {
                 System.out.println("encodedStr:" + query);
                 writer.flush();
                 writer.close();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line;
+                while ((line = reader.readLine())!= null) {
+                    System.out.println(line);
+                }
             }catch(Exception e){
                 e.printStackTrace();
             }finally {
@@ -141,7 +147,6 @@ public class ServerRequests {
 
         @Override
         protected User doInBackground(Void... params) {
-            System.out.println("doing in background");
             HttpURLConnection con = null;
             Map<String,String> dataToSend = new HashMap<>();
             dataToSend.put("username", user.getUsername());
@@ -152,7 +157,7 @@ public class ServerRequests {
             User returnedUser=null;
             try{
                 //Conerting address String to URL
-                URL url = new URL(SERVER_ADDRESS + "FetchUserData.php");
+                URL url = new URL(SERVER_ADDRESS + "login.php");
 
                 //Opening the connection
                  con = (HttpURLConnection) url.openConnection();
@@ -160,6 +165,7 @@ public class ServerRequests {
                 //POST method
                 con.setRequestMethod("POST");
                 //To enable inputting values using POST method
+                con.setDoOutput(true);
                 con.setDoOutput(true);
                 OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
                 //Write dataToSend to OutputStreamWriter
