@@ -159,10 +159,8 @@ public class ServerRequests {
             try{
                 //Conerting address String to URL
                 URL url = new URL(SERVER_ADDRESS + "login.php");
-
                 //Opening the connection
                  con = (HttpURLConnection) url.openConnection();
-                System.out.println("httpconnection is opened");
                 //POST method
                 con.setRequestMethod("POST");
                 //To enable inputting values using POST method

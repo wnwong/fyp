@@ -23,7 +23,7 @@
         android:layout_marginTop="139dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:hint="Username" />
+        android:hint="@string/username" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/input_pwd"
-        android:hint="Password"
+        android:hint="@string/pwd"
         android:layout_marginTop="20dp"
         android:layout_centerVertical="true"
         android:layout_below="@id/input_uname"

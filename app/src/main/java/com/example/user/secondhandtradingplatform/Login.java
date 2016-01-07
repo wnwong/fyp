@@ -95,7 +95,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private void logUserIn(User returnedUser){
         userLocalStore.storeUserData(returnedUser);
         userLocalStore.setUserLoggedIn(true);
-        startActivity(new Intent(this, Main.class));
+        Intent intent = new Intent(this, Main.class);
+        intent.putExtra("username", returnedUser.getUsername());
+        intent.putExtra("email", returnedUser.getEmail());
+        startActivity(intent);
     }
 
     private void showErrorMessage(){

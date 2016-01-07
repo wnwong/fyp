@@ -1,5 +1,7 @@
 package activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.secondhandtradingplatform.Add_Gadget_Activity;
@@ -23,39 +27,27 @@ import com.example.user.secondhandtradingplatform.Login;
 import com.example.user.secondhandtradingplatform.R;
 import com.example.user.secondhandtradingplatform.Register;
 
+import user.UserLocalStore;
+
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
- //   RecyclerView rv;
+    UserLocalStore userLocalStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        userLocalStore = new UserLocalStore(this);
 
         Fragment frag = new CameraFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_body, frag);
         fragmentTransaction.commit();
-     /*   rv = (RecyclerView) findViewById(R.id.rview);
-        rv.setHasFixedSize(true);
 
-        //use a linear layout manager
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
-
-        //for testing
-        Camera cam = new Camera("Canon PowerShot G7 X", "2500","Yes", "MongKok");
-        Camera cam1 = new Camera("Canon EOS 7D Mark II", "4300", "Yes", "Causeway Bay");
-        Camera cam2 = new Camera("Canon EOS 760D", "5000", "No", "HongKongIsland");
-        cam.add(cam);
-        cam1.add(cam1);
-        cam2.add(cam2);
-
-        RVAdapter adapter = new RVAdapter(Camera.get(), R.layout.cardview);
-        rv.setAdapter(adapter);
-        */
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +68,35 @@ public class Main extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("OnStart");
+        authenticate();
+    }
+
+    private boolean authenticate(){
+        if(userLocalStore.getLoggedInUser() == null){
+            return false;
+        }
+        return true;
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // After User login change the login button into logout button
+        if(authenticate() == true){
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.nav_login).setTitle(getString(R.string.logout));
+            //Update nav_header
+            TextView username = (TextView) findViewById(R.id.username);
+            TextView email = (TextView) findViewById(R.id.email);
+            username.setText(userLocalStore.getLoggedInUser().getUsername().toString());
+            email.setText(userLocalStore.getLoggedInUser().getEmail().toString());
+        }
     }
 
     @Override
@@ -134,14 +155,25 @@ public class Main extends AppCompatActivity
         } else if (id == R.id.nav_games) {
 
         } else if (id == R.id.nav_login) {
-            Intent myIntent = new Intent(this, Login.class);
-            startActivity(myIntent);
-            finish();
+            if(authenticate() == true){
+             logoutMessage();
+              NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+              Menu menu = navigationView.getMenu();
+              menu.findItem(R.id.nav_login).setTitle(getString(R.string.title_activity_login));
+                //Update nav_header
+                TextView username = (TextView) findViewById(R.id.username);
+                TextView email = (TextView) findViewById(R.id.email);
+                username.setText("");
+                email.setText("");
+          }else{
+              Intent myIntent = new Intent(this, Login.class);
+              startActivity(myIntent);
+              finish();
+          }
         } else if (id == R.id.nav_register) {
             Intent myIntent = new Intent(this, Register.class);
             startActivity(myIntent);
             finish();
-
         }
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -157,5 +189,24 @@ public class Main extends AppCompatActivity
         return true;
     }
 
+    private void logoutMessage(){
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Main.this);
+        dialogBuilder.setMessage("確定要登出嗎？");
+        dialogBuilder.setTitle("提示");
+        dialogBuilder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                userLocalStore.clearUserData();
+                userLocalStore.setUserLoggedIn(false);
+            }
+        });
+        dialogBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialogBuilder.show();
+    }
 
 }
