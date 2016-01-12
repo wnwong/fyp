@@ -3,11 +3,16 @@ package tabs;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +20,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.secondhandtradingplatform.R;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import server.ServerRequests;
 
 public class add_Info extends Fragment implements View.OnClickListener{
     private static final int RESULT_LOAD_IMAGE = 1;
+    public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
     ImageView imageToUpload, downloadedImage;
     Button bUploadImage, bDownloadImage;
     EditText uploadImageName, downloadImageName;
@@ -68,14 +85,75 @@ public class add_Info extends Fragment implements View.OnClickListener{
         switch(v.getId()){
             case R.id.imageToUpload:
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE );
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
                 break;
             case R.id.bUploadImage:
-
+                Bitmap image = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
+                new UploadImage(image, uploadImageName.getText().toString()).execute();
                 break;
             case R.id.bDownloadImage:
 
                 break;
+        }
+    }
+    private class UploadImage extends AsyncTask<Void, Void, Void>{
+        Bitmap image;
+        String name;
+        OutputStreamWriter writer = null;
+        BufferedReader reader = null;
+
+        public UploadImage(Bitmap image, String name){
+            this.image = image;
+            this.name = name;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            byte[] array = byteArrayOutputStream.toByteArray();
+            String encodeImage = Base64.encodeToString(array, Base64.DEFAULT);
+
+            Map<String, String> dataToSend = new HashMap<>();
+            dataToSend.put("image", encodeImage);
+            dataToSend.put("name", name);
+            System.out.println(dataToSend.toString());
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("image", encodeImage)
+                    .appendQueryParameter("name", name);
+            String query = builder.build().getEncodedQuery();
+
+            System.out.println(query);
+            try{
+                URL url = new URL(SERVER_ADDRESS + "SavePicture.php");
+                HttpURLConnection   con = (HttpURLConnection) url.openConnection();
+                Log.i("custom_check", "HTTP connection opened!!");
+                con.setRequestMethod("POST");
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                Log.i("custom_check", "Start Writing from Server");
+                writer = new OutputStreamWriter(con.getOutputStream());
+                writer.write(query);
+                writer.flush();
+                Log.i("custom_check", "Start Reading from Server");
+                reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line;
+                while((line = reader.readLine()) != null){
+                    Log.i("custom_check", line);
+                }
+                writer.close();
+                reader.close();
+                con.disconnect();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(getActivity(), "Image Uploaded", Toast.LENGTH_SHORT).show();
         }
     }
 }

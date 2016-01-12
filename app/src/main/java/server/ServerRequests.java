@@ -4,15 +4,19 @@ package server;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -28,7 +32,6 @@ import user.User;
 
 public class ServerRequests {
     ProgressDialog progressDialog;
-    public static final int CONNECTION_TIMEOUT = 1000 * 15;
     public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
 
     public ServerRequests(Context context){
@@ -36,7 +39,6 @@ public class ServerRequests {
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Processing");
         progressDialog.setMessage("Please wait...");
-
     }
 
     public void storeUserDataInBackground(User user, GetUserCallback userCallback){
@@ -219,3 +221,4 @@ public class ServerRequests {
         }
     }
 }
+

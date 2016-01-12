@@ -35,8 +35,8 @@ public class Add_Gadget_Activity extends AppCompatActivity {
         // Creating The Toolbar and setting it as the Toolbar for the activity
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.title_activity_add__gadget_);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.icons));
+     //   toolbar.setTitle(R.string.title_activity_add__gadget_);
+       // toolbar.setTitleTextColor(getResources().getColor(R.color.icons));
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
         // Assigning ViewPager View and setting the adapter
