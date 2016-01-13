@@ -4,6 +4,7 @@ package tabs;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +38,16 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import product.Camera;
 import server.ServerRequests;
 
 public class add_Info extends Fragment implements View.OnClickListener{
     private static final int RESULT_LOAD_IMAGE = 1;
+    private static  final int REQUEST_CAMERA = 10;
     public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
-    ImageView imageToUpload, downloadedImage;
-    Button bUploadImage, bDownloadImage;
+    ImageView imageToUpload;// downloadedImage;
+    ImageButton addGalleryBtn, addCameraBtn;
+    Button bUploadImage;
     EditText uploadImageName, downloadImageName;
 
     @Override
@@ -50,17 +55,18 @@ public class add_Info extends Fragment implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
         View v = getView();
         imageToUpload = (ImageView) v.findViewById(R.id.imageToUpload);
-        downloadedImage = (ImageView) v.findViewById(R.id.downloadedImage);
-
+  //      downloadedImage = (ImageView) v.findViewById(R.id.downloadedImage);
         bUploadImage = (Button) v.findViewById(R.id.bUploadImage);
-        bDownloadImage = (Button) v.findViewById(R.id.bDownloadImage);
+        addGalleryBtn = (ImageButton) v.findViewById(R.id.addGalleryBtn);
+        addCameraBtn = (ImageButton) v.findViewById(R.id.addCameraBtn);
 
         uploadImageName = (EditText) v.findViewById(R.id.etUploadName);
-        downloadImageName = (EditText) v.findViewById(R.id.etDownloadName);
+  //      downloadImageName = (EditText) v.findViewById(R.id.etDownloadName);
 
-        imageToUpload.setOnClickListener(this);
+  //      imageToUpload.setOnClickListener(this);
+        addGalleryBtn.setOnClickListener(this);
+        addCameraBtn.setOnClickListener(this);
         bUploadImage.setOnClickListener(this);
-        bDownloadImage.setOnClickListener(this);
     }
 
     @Nullable
@@ -77,24 +83,44 @@ public class add_Info extends Fragment implements View.OnClickListener{
         if(requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data !=null ){
             Uri selectedImage = data.getData();  // Get the address of the selected image
             imageToUpload.setImageURI(selectedImage);
+        }else if(requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data !=null){
+            Uri selectedImage = data.getData();  // Get the address of the selected image
+            imageToUpload.setImageURI(selectedImage);
+
         }
+    }
+
+/*    @Override
+    public void onResume() {
+        super.onResume();
+        if(imageToUpload.getDrawable() != null){
+            ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap().recycle();
+        }
+    }
+*/
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        imageToUpload.setImageDrawable(null);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.imageToUpload:
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
-                break;
             case R.id.bUploadImage:
                 Bitmap image = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
                 new UploadImage(image, uploadImageName.getText().toString()).execute();
                 break;
-            case R.id.bDownloadImage:
-
+            case R.id.addGalleryBtn:
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
                 break;
-        }
+            case R.id.addCameraBtn:
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, REQUEST_CAMERA);
+                break;
+    }
     }
     private class UploadImage extends AsyncTask<Void, Void, Void>{
         Bitmap image;

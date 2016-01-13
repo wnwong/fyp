@@ -71,10 +71,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
               //  Toast.makeText(getApplicationContext(), "Login button is selected!", Toast.LENGTH_SHORT).show();
                 String username = uname.getText().toString();
                 String password = pwd.getText().toString();
-
                 User user = new User (username, password);
                 // Check if username and password are correct
                 authenticate(user);
+                Snackbar.make(v, "You are now logged in !", Snackbar.LENGTH_SHORT).show();
         }
     }
 
