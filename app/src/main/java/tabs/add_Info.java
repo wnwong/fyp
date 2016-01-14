@@ -83,6 +83,8 @@ public class add_Info extends Fragment implements View.OnClickListener {
         addCameraBtn2.setOnClickListener(this);
         bUploadImage.setOnClickListener(this);
         imageToUpload.setOnClickListener(this);
+        imageToUpload2.setOnClickListener(this);
+
     }
 
     @Nullable
@@ -185,6 +187,10 @@ public class add_Info extends Fragment implements View.OnClickListener {
             case R.id.imageToUpload:
                 Bitmap bitmap = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
                 imageToUpload.setImageBitmap(RotateBitmap(bitmap, 90f));
+                break;
+            case R.id.imageToUpload2:
+                Bitmap bitmap2 = ((BitmapDrawable) imageToUpload2.getDrawable()).getBitmap();
+                imageToUpload2.setImageBitmap(RotateBitmap(bitmap2, 90f));
                 break;
         }
     }
