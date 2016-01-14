@@ -82,6 +82,7 @@ public class add_Info extends Fragment implements View.OnClickListener {
         addGalleryBtn2.setOnClickListener(this);
         addCameraBtn2.setOnClickListener(this);
         bUploadImage.setOnClickListener(this);
+        imageToUpload.setOnClickListener(this);
     }
 
     @Nullable
@@ -152,6 +153,12 @@ public class add_Info extends Fragment implements View.OnClickListener {
         }
     }
 
+    public static Bitmap RotateBitmap(Bitmap source, float angle)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -174,6 +181,10 @@ public class add_Info extends Fragment implements View.OnClickListener {
             case R.id.addCameraBtn2:
                 Intent cameraIntent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent2, REQUEST_CAMERA2);
+                break;
+            case R.id.imageToUpload:
+                Bitmap bitmap = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
+                imageToUpload.setImageBitmap(RotateBitmap(bitmap, 90f));
                 break;
         }
     }
