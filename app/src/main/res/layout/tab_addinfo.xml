@@ -96,6 +96,43 @@
                 android:padding="10dp" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp">
+
+            <ImageButton
+                android:id="@+id/addCameraBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image2"
+                android:background="@mipmap/ic_add_photo" />
+
+            <ImageButton
+                android:id="@+id/addGalleryBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image2"
+                android:layout_toRightOf="@+id/addCameraBtn2"
+                android:background="@mipmap/ic_collection" />
+
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_border" />
+
+            <ImageView
+                android:id="@+id/imageToUpload2"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:padding="10dp" />
+        </RelativeLayout>
+
 
         <EditText
             android:id="@+id/etUploadName"

@@ -3,15 +3,19 @@ package tabs;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.CursorLoader;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +35,9 @@ import org.w3c.dom.Text;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -41,12 +48,14 @@ import java.util.Map;
 import product.Camera;
 import server.ServerRequests;
 
-public class add_Info extends Fragment implements View.OnClickListener{
+public class add_Info extends Fragment implements View.OnClickListener {
     private static final int RESULT_LOAD_IMAGE = 1;
-    private static  final int REQUEST_CAMERA = 10;
+    private static final int REQUEST_CAMERA = 10;
+    private static final int RESULT_LOAD_IMAGE2 = 2;
+    private static final int REQUEST_CAMERA2 = 20;
     public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
-    ImageView imageToUpload;// downloadedImage;
-    ImageButton addGalleryBtn, addCameraBtn;
+    ImageView imageToUpload, imageToUpload2;// downloadedImage;
+    ImageButton addGalleryBtn, addCameraBtn, addGalleryBtn2, addCameraBtn2;
     Button bUploadImage;
     EditText uploadImageName, downloadImageName;
 
@@ -55,24 +64,30 @@ public class add_Info extends Fragment implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
         View v = getView();
         imageToUpload = (ImageView) v.findViewById(R.id.imageToUpload);
-  //      downloadedImage = (ImageView) v.findViewById(R.id.downloadedImage);
+        imageToUpload2 = (ImageView) v.findViewById(R.id.imageToUpload2);
+        //      downloadedImage = (ImageView) v.findViewById(R.id.downloadedImage);
         bUploadImage = (Button) v.findViewById(R.id.bUploadImage);
         addGalleryBtn = (ImageButton) v.findViewById(R.id.addGalleryBtn);
         addCameraBtn = (ImageButton) v.findViewById(R.id.addCameraBtn);
 
-        uploadImageName = (EditText) v.findViewById(R.id.etUploadName);
-  //      downloadImageName = (EditText) v.findViewById(R.id.etDownloadName);
+        addGalleryBtn2 = (ImageButton) v.findViewById(R.id.addGalleryBtn2);
+        addCameraBtn2 = (ImageButton) v.findViewById(R.id.addCameraBtn2);
 
-  //      imageToUpload.setOnClickListener(this);
+        uploadImageName = (EditText) v.findViewById(R.id.etUploadName);
+        //      downloadImageName = (EditText) v.findViewById(R.id.etDownloadName);
+
+        //      imageToUpload.setOnClickListener(this);
         addGalleryBtn.setOnClickListener(this);
         addCameraBtn.setOnClickListener(this);
+        addGalleryBtn2.setOnClickListener(this);
+        addCameraBtn2.setOnClickListener(this);
         bUploadImage.setOnClickListener(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab_addinfo,container,false);
+        View v = inflater.inflate(R.layout.tab_addinfo, container, false);
 
         return v;
     }
@@ -80,34 +95,66 @@ public class add_Info extends Fragment implements View.OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data !=null ){
-            Uri selectedImage = data.getData();  // Get the address of the selected image
-            imageToUpload.setImageURI(selectedImage);
-        }else if(requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data !=null){
-            Uri selectedImage = data.getData();  // Get the address of the selected image
-            imageToUpload.setImageURI(selectedImage);
-
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            String[] projection = {MediaStore.MediaColumns.DATA};
+            CursorLoader cursorLoader = new CursorLoader(getContext(), selectedImageUri, projection, null, null,
+                    null);
+            Cursor cursor = cursorLoader.loadInBackground();
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            cursor.moveToFirst();
+            String selectedImagePath = cursor.getString(column_index);
+            Bitmap bm;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(selectedImagePath, options);
+            final int REQUIRED_SIZE = 200;
+            int scale = 1;
+            while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                    && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+                scale *= 2;
+            options.inSampleSize = scale;
+            options.inJustDecodeBounds = false;
+            bm = BitmapFactory.decodeFile(selectedImagePath, options);
+            imageToUpload.setImageBitmap(bm);
+        } else if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+            //           Uri selectedImage = data.getData();  // Get the address of the selected image
+            //          imageToUpload.setImageURI(selectedImage);
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            imageToUpload.setImageBitmap(bitmap);
+        } else if (requestCode == RESULT_LOAD_IMAGE2 && resultCode == Activity.RESULT_OK && data != null) {
+//            Uri selectedImage = data.getData();  // Get the address of the selected image
+//            imageToUpload2.setImageURI(selectedImage);
+            Uri selectedImageUri = data.getData();
+            String[] projection = {MediaStore.MediaColumns.DATA};
+            CursorLoader cursorLoader = new CursorLoader(getContext(), selectedImageUri, projection, null, null,
+                    null);
+            Cursor cursor = cursorLoader.loadInBackground();
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            cursor.moveToFirst();
+            String selectedImagePath = cursor.getString(column_index);
+            Bitmap bm;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(selectedImagePath, options);
+            final int REQUIRED_SIZE = 200;
+            int scale = 1;
+            while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                    && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+                scale *= 2;
+            options.inSampleSize = scale;
+            options.inJustDecodeBounds = false;
+            bm = BitmapFactory.decodeFile(selectedImagePath, options);
+            imageToUpload2.setImageBitmap(bm);
+        } else if (requestCode == REQUEST_CAMERA2 && resultCode == Activity.RESULT_OK && data != null) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            imageToUpload2.setImageBitmap(bitmap);
         }
-    }
-
-/*    @Override
-    public void onResume() {
-        super.onResume();
-        if(imageToUpload.getDrawable() != null){
-            ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap().recycle();
-        }
-    }
-*/
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        imageToUpload.setImageDrawable(null);
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.bUploadImage:
                 Bitmap image = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
                 new UploadImage(image, uploadImageName.getText().toString()).execute();
@@ -120,15 +167,24 @@ public class add_Info extends Fragment implements View.OnClickListener{
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, REQUEST_CAMERA);
                 break;
+            case R.id.addGalleryBtn2:
+                Intent galleryIntent2 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent2, RESULT_LOAD_IMAGE2);
+                break;
+            case R.id.addCameraBtn2:
+                Intent cameraIntent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent2, REQUEST_CAMERA2);
+                break;
+        }
     }
-    }
-    private class UploadImage extends AsyncTask<Void, Void, Void>{
+
+    private class UploadImage extends AsyncTask<Void, Void, Void> {
         Bitmap image;
         String name;
         OutputStreamWriter writer = null;
         BufferedReader reader = null;
 
-        public UploadImage(Bitmap image, String name){
+        public UploadImage(Bitmap image, String name) {
             this.image = image;
             this.name = name;
         }
@@ -150,9 +206,9 @@ public class add_Info extends Fragment implements View.OnClickListener{
             String query = builder.build().getEncodedQuery();
 
             System.out.println(query);
-            try{
+            try {
                 URL url = new URL(SERVER_ADDRESS + "SavePicture.php");
-                HttpURLConnection   con = (HttpURLConnection) url.openConnection();
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 Log.i("custom_check", "HTTP connection opened!!");
                 con.setRequestMethod("POST");
                 con.setDoOutput(true);
@@ -164,13 +220,13 @@ public class add_Info extends Fragment implements View.OnClickListener{
                 Log.i("custom_check", "Start Reading from Server");
                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String line;
-                while((line = reader.readLine()) != null){
+                while ((line = reader.readLine()) != null) {
                     Log.i("custom_check", line);
                 }
                 writer.close();
                 reader.close();
                 con.disconnect();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
