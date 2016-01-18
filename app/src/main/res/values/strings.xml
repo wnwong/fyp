@@ -13,6 +13,7 @@
     <string name="nav_item_tablet">平板電腦</string>
     <string name="nav_item_smartphone">智能手機</string>
     <string name="nav_item_vgame">電子遊戲</string>
+    <string name="nav_item_earphone">耳機</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_camera</item>
@@ -40,7 +41,16 @@
     <!-- add gadget-->
     <string name="gadget_name">出售物品名稱</string>
     <string name="gadget_price">售價</string>
-    <string name="gadget_warranty">保養期內</string>
+    <string name="gadget_warranty">保養期內:</string>
+    <string name="gadget_type">物品類型</string>
+    <string-array name="productType">
+        <item>""</item>
+        <item>@string/nav_item_earphone</item>
+        <item>@string/nav_item_camera</item>
+        <item>@string/nav_item_tablet</item>
+        <item>@string/nav_item_smartphone</item>
+        <item>@string/nav_item_vgame</item>
+    </string-array>
 
     <!-- gadget info-->
     <string name="gname">物品名稱：</string>
@@ -49,8 +59,7 @@
     <string name="glocation">交易地點：</string>
 
 
-
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_add__gadget_">出售物品</string>
     <string name="title_activity_register">註冊</string>

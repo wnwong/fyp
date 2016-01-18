@@ -21,10 +21,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,10 +56,11 @@ public class add_Info extends Fragment implements View.OnClickListener {
     private static final int RESULT_LOAD_IMAGE2 = 2;
     private static final int REQUEST_CAMERA2 = 20;
     public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
-    ImageView imageToUpload, imageToUpload2;// downloadedImage;
+    ImageView imageToUpload, imageToUpload2;
     ImageButton addGalleryBtn, addCameraBtn, addGalleryBtn2, addCameraBtn2;
     Button bUploadImage;
-    EditText uploadImageName, downloadImageName;
+    EditText uploadImageName;
+    Spinner spinner;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -74,9 +77,13 @@ public class add_Info extends Fragment implements View.OnClickListener {
         addCameraBtn2 = (ImageButton) v.findViewById(R.id.addCameraBtn2);
 
         uploadImageName = (EditText) v.findViewById(R.id.etUploadName);
-        //      downloadImageName = (EditText) v.findViewById(R.id.etDownloadName);
 
-        //      imageToUpload.setOnClickListener(this);
+        spinner = (Spinner) v.findViewById(R.id.productType);
+        String[] type = getResources().getStringArray(R.array.productType);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.myspinner, type);
+        adapter.setDropDownViewResource(R.layout.myspinner);
+        spinner.setAdapter(adapter);
+
         addGalleryBtn.setOnClickListener(this);
         addCameraBtn.setOnClickListener(this);
         addGalleryBtn2.setOnClickListener(this);
@@ -155,12 +162,12 @@ public class add_Info extends Fragment implements View.OnClickListener {
         }
     }
 
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
-    {
+    public static Bitmap RotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -190,7 +197,10 @@ public class add_Info extends Fragment implements View.OnClickListener {
                 break;
             case R.id.imageToUpload2:
                 Bitmap bitmap2 = ((BitmapDrawable) imageToUpload2.getDrawable()).getBitmap();
-                imageToUpload2.setImageBitmap(RotateBitmap(bitmap2, 90f));
+                if(bitmap2 != null)
+                {
+                    imageToUpload2.setImageBitmap(RotateBitmap(bitmap2, 90f));
+                }
                 break;
         }
     }

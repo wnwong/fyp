@@ -158,11 +158,13 @@ public class ServerRequests {
             String encodedStr = getEncodedData(dataToSend);
             BufferedReader reader = null;
             User returnedUser=null;
+            System.out.println("before try");
             try{
                 //Conerting address String to URL
                 URL url = new URL(SERVER_ADDRESS + "login.php");
                 //Opening the connection
                  con = (HttpURLConnection) url.openConnection();
+                System.out.println("connection opened");
                 //POST method
                 con.setRequestMethod("POST");
                 //To enable inputting values using POST method

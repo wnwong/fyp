@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 User user = new User (username, password);
                 // Check if username and password are correct
                 authenticate(user);
-                Snackbar.make(v, "You are now logged in !", Snackbar.LENGTH_SHORT).show();
+            //    Snackbar.make(v, "You are now logged in !", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -87,6 +87,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     showErrorMessage();
                 }else{
                     logUserIn(returnedUser);
+                    Toast.makeText(getApplicationContext(), "You are now logged in !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
