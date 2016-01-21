@@ -1,22 +1,33 @@
 package activity;
 
 import android.app.Activity;
-        import android.os.Bundle;
+import android.os.AsyncTask;
+import android.os.Bundle;
         import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
 
         import com.example.user.secondhandtradingplatform.R;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
 import product.Camera;
 import adapter.RVAdapter;
 
 
 public class CameraFragment extends Fragment{
-
+    public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -40,6 +51,7 @@ public class CameraFragment extends Fragment{
 /**********************************************************************************************/
         RVAdapter adapter = new RVAdapter(Camera.get(), R.layout.cardview);
         rv.setAdapter(adapter);
+//        retrieveGadget();
     }
 
     @Override
@@ -60,5 +72,39 @@ public class CameraFragment extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private class retrieveGadget extends AsyncTask<Void, Void, Camera>{
+
+        @Override
+        protected Camera doInBackground(Void... params) {
+
+            try{
+                URL url = new URL(SERVER_ADDRESS + "retrieveGadget.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                con.setDoOutput(true);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line;
+                StringBuilder sb = new StringBuilder();
+                while((line = reader.readLine()) != null){
+                    sb.append(line + "\n");
+                }
+                Log.i("custon_check", "The retrieved gadgets:");
+                Log.i("custon_check", sb.toString());
+
+                JSONObject jObject = new JSONObject(sb.toString());
+
+            }catch(Exception e){
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Camera camera) {
+            super.onPostExecute(camera);
+        }
     }
 }

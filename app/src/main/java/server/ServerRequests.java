@@ -197,12 +197,13 @@ public class ServerRequests {
                     String email = null;
                     String location = null;
                     String gender = null;
+                    int user_id = jObject.getInt("user_id");
                          email = jObject.getString("email");
                          location = jObject.getString("location");
                          gender = jObject.getString("gender");
                     Log.i("custom_check", "the parsed JSON info are as follows:");
-                    Log.i("custom_check", email + " " + location + " " +gender);
-                    returnedUser = new User(user.getUsername(), user.getPassword(), email, location, gender);
+                    Log.i("custom_check", String.valueOf(user_id) + " " + email + " " + location + " " +gender);
+                    returnedUser = new User(user_id, user.getUsername(), user.getPassword(), email, location, gender);
                     reader.close();
                 }
             }catch(Exception e){

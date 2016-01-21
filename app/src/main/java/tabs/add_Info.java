@@ -49,6 +49,7 @@ import java.util.Map;
 
 import product.Camera;
 import server.ServerRequests;
+import user.UserLocalStore;
 
 public class add_Info extends Fragment implements View.OnClickListener {
     private static final int RESULT_LOAD_IMAGE = 1;
@@ -61,6 +62,7 @@ public class add_Info extends Fragment implements View.OnClickListener {
     Button bUploadImage;
     EditText uploadImageName;
     Spinner spinner;
+    UserLocalStore userLocalStore;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -91,6 +93,8 @@ public class add_Info extends Fragment implements View.OnClickListener {
         bUploadImage.setOnClickListener(this);
         imageToUpload.setOnClickListener(this);
         imageToUpload2.setOnClickListener(this);
+
+        userLocalStore = new UserLocalStore(getContext());
 
     }
 
@@ -226,10 +230,11 @@ public class add_Info extends Fragment implements View.OnClickListener {
             Map<String, String> dataToSend = new HashMap<>();
             dataToSend.put("image", encodeImage);
             dataToSend.put("name", name);
+            dataToSend.put("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
             System.out.println(dataToSend.toString());
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("image", encodeImage)
-                    .appendQueryParameter("name", name);
+                    .appendQueryParameter("name", name).appendQueryParameter("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
             String query = builder.build().getEncodedQuery();
 
             System.out.println(query);
