@@ -62,7 +62,7 @@ public class add_Info extends Fragment implements View.OnClickListener {
     ImageView imageToUpload, imageToUpload2;
     ImageButton addGalleryBtn, addCameraBtn, addGalleryBtn2, addCameraBtn2;
     Button bUploadImage;
-    EditText uploadImageName;
+    EditText uploadImageName, gprice;
     Spinner productType, productBrand, productModel;
     RadioGroup rgroup;
     RadioButton yesBtn, noBtn;
@@ -83,6 +83,7 @@ public class add_Info extends Fragment implements View.OnClickListener {
         addCameraBtn2 = (ImageButton) v.findViewById(R.id.addCameraBtn2);
 
         uploadImageName = (EditText) v.findViewById(R.id.etUploadName);
+        gprice = (EditText) v.findViewById(R.id.gprice);
 
         productType = (Spinner) v.findViewById(R.id.productType);
         String[] type = getResources().getStringArray(R.array.productType);
@@ -199,8 +200,12 @@ public class add_Info extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bUploadImage:
+                String type = productType.getSelectedItem().toString();
+                String brand = productBrand.getSelectedItem().toString();
+                String model = productModel.getSelectedItem().toString();
+                String price = gprice.getText().toString();
                 Bitmap image = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
-                new UploadImage(image, uploadImageName.getText().toString()).execute();
+                new UploadImage(type, brand, model, warranty, price, image, uploadImageName.getText().toString()).execute();
                 break;
             case R.id.addGalleryBtn:
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -254,13 +259,18 @@ public class add_Info extends Fragment implements View.OnClickListener {
 
     private class UploadImage extends AsyncTask<Void, Void, Void> {
         Bitmap image;
-        String name;
+        String name, price, warranty, type, brand, model;
         OutputStreamWriter writer = null;
         BufferedReader reader = null;
 
-        public UploadImage(Bitmap image, String name) {
+        public UploadImage(String type, String brand, String model, String warranty, String price, Bitmap image, String name) {
+            this.type = type;
+            this.brand = brand;
+            this.model = model;
+            this.price = price;
             this.image = image;
             this.name = name;
+            this.warranty = warranty;
         }
 
         @Override
@@ -276,8 +286,14 @@ public class add_Info extends Fragment implements View.OnClickListener {
             dataToSend.put("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
             System.out.println(dataToSend.toString());
             Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("type", type )
+                    .appendQueryParameter("brand", brand)
+                    .appendQueryParameter("model", model )
+                    .appendQueryParameter("warranty", warranty )
+                    .appendQueryParameter("price", price )
                     .appendQueryParameter("image", encodeImage)
-                    .appendQueryParameter("name", name).appendQueryParameter("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
+                    .appendQueryParameter("name", name)
+                    .appendQueryParameter("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
             String query = builder.build().getEncodedQuery();
 
             System.out.println(query);
