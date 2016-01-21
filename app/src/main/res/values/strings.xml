@@ -43,6 +43,8 @@
     <string name="gadget_price">售價</string>
     <string name="gadget_warranty">保養期內:</string>
     <string name="gadget_type">物品類型</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
     <string-array name="productType">
         <item>""</item>
         <item>@string/nav_item_earphone</item>
@@ -66,5 +68,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_add_new_gadget">AddNewGadget</string>
+    <string name="title_activity_add_gadget">addGadget</string>
 
 </resources>

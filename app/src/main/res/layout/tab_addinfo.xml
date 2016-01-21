@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingTop="100dp">
 
         <TextView
             android:id="@+id/type"
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:text="No"
+                    android:text="@string/no"
                     android:textSize="15sp" />
 
                 <RadioButton
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:text="Yes"
+                    android:text="@string/yes"
                     android:textSize="15sp" />
 
             </RadioGroup>

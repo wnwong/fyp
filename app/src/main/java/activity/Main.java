@@ -24,6 +24,7 @@ import com.example.user.secondhandtradingplatform.Add_Gadget_Activity;
 import com.example.user.secondhandtradingplatform.Login;
 import com.example.user.secondhandtradingplatform.R;
 import com.example.user.secondhandtradingplatform.Register;
+import com.example.user.secondhandtradingplatform.addGadget;
 
 import user.UserLocalStore;
 
@@ -52,7 +53,7 @@ public class Main extends AppCompatActivity
             public void onClick(View view) {
              /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                Intent myIntent = new Intent(Main.this, Add_Gadget_Activity.class);
+                Intent myIntent = new Intent(Main.this, addGadget.class);
                 startActivity(myIntent);
                 finish();
             }
@@ -89,6 +90,7 @@ public class Main extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             Menu menu = navigationView.getMenu();
             menu.findItem(R.id.nav_login).setTitle(getString(R.string.logout));
+            menu.findItem(R.id.nav_register).setVisible(false);
             //Update nav_header
             TextView username = (TextView) findViewById(R.id.username);
             TextView email = (TextView) findViewById(R.id.email);
@@ -157,6 +159,7 @@ public class Main extends AppCompatActivity
               NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
               Menu menu = navigationView.getMenu();
               menu.findItem(R.id.nav_login).setTitle(getString(R.string.title_activity_login));
+                menu.findItem(R.id.nav_register).setVisible(true);
                 //Update nav_header
                 TextView username = (TextView) findViewById(R.id.username);
                 TextView email = (TextView) findViewById(R.id.email);
@@ -195,6 +198,7 @@ public class Main extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 userLocalStore.clearUserData();
                 userLocalStore.setUserLoggedIn(false);
+
             }
         });
         dialogBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

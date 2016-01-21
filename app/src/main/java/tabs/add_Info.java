@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +64,9 @@ public class add_Info extends Fragment implements View.OnClickListener {
     Button bUploadImage;
     EditText uploadImageName;
     Spinner spinner;
+    RadioGroup rgroup;
+    RadioButton yesBtn, noBtn;
+    String warranty;
     UserLocalStore userLocalStore;
 
     @Override
@@ -70,11 +75,10 @@ public class add_Info extends Fragment implements View.OnClickListener {
         View v = getView();
         imageToUpload = (ImageView) v.findViewById(R.id.imageToUpload);
         imageToUpload2 = (ImageView) v.findViewById(R.id.imageToUpload2);
-        //      downloadedImage = (ImageView) v.findViewById(R.id.downloadedImage);
+
         bUploadImage = (Button) v.findViewById(R.id.bUploadImage);
         addGalleryBtn = (ImageButton) v.findViewById(R.id.addGalleryBtn);
         addCameraBtn = (ImageButton) v.findViewById(R.id.addCameraBtn);
-
         addGalleryBtn2 = (ImageButton) v.findViewById(R.id.addGalleryBtn2);
         addCameraBtn2 = (ImageButton) v.findViewById(R.id.addCameraBtn2);
 
@@ -86,6 +90,10 @@ public class add_Info extends Fragment implements View.OnClickListener {
         adapter.setDropDownViewResource(R.layout.myspinner);
         spinner.setAdapter(adapter);
 
+        rgroup = (RadioGroup) v.findViewById(R.id.rgroup);
+        yesBtn = (RadioButton) v.findViewById(R.id.yesButton);
+        noBtn = (RadioButton) v.findViewById(R.id.noButton);
+
         addGalleryBtn.setOnClickListener(this);
         addCameraBtn.setOnClickListener(this);
         addGalleryBtn2.setOnClickListener(this);
@@ -93,6 +101,9 @@ public class add_Info extends Fragment implements View.OnClickListener {
         bUploadImage.setOnClickListener(this);
         imageToUpload.setOnClickListener(this);
         imageToUpload2.setOnClickListener(this);
+        rgroup.setOnCheckedChangeListener(listener);
+        yesBtn.setOnClickListener(this);
+        noBtn.setOnClickListener(this);
 
         userLocalStore = new UserLocalStore(getContext());
 
@@ -197,7 +208,10 @@ public class add_Info extends Fragment implements View.OnClickListener {
                 break;
             case R.id.imageToUpload:
                 Bitmap bitmap = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
-                imageToUpload.setImageBitmap(RotateBitmap(bitmap, 90f));
+                if(bitmap != null)
+                {
+                    imageToUpload.setImageBitmap(RotateBitmap(bitmap, 90f));
+                }
                 break;
             case R.id.imageToUpload2:
                 Bitmap bitmap2 = ((BitmapDrawable) imageToUpload2.getDrawable()).getBitmap();
@@ -208,6 +222,23 @@ public class add_Info extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+    private RadioGroup.OnCheckedChangeListener listener = new RadioGroup.OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            int p = group.indexOfChild((RadioButton) getView().findViewById(checkedId));
+            int count = group.getChildCount();
+            switch (checkedId){
+                case R.id.yesButton:
+                    warranty = getString(R.string.yes);
+                    Log.i("custom_check", warranty);
+                    break;
+                case R.id.noButton:
+                    warranty = getString(R.string.no);
+                    Log.i("custom_check", warranty);
+                    break;
+            }
+        }
+    };
 
     private class UploadImage extends AsyncTask<Void, Void, Void> {
         Bitmap image;
