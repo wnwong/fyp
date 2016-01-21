@@ -3,8 +3,9 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:singleLine="true"
-    android:textColor="@color/colorPrimary"
+    android:padding="10dp"
+    style="@style/Base.TextAppearance.AppCompat.Widget.DropDownItem"
+    android:textColor="@color/colorPrimaryDark"
     android:textStyle="bold" >
 </TextView>

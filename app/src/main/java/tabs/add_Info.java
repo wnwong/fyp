@@ -63,7 +63,7 @@ public class add_Info extends Fragment implements View.OnClickListener {
     ImageButton addGalleryBtn, addCameraBtn, addGalleryBtn2, addCameraBtn2;
     Button bUploadImage;
     EditText uploadImageName;
-    Spinner spinner;
+    Spinner productType, productBrand, productModel;
     RadioGroup rgroup;
     RadioButton yesBtn, noBtn;
     String warranty;
@@ -84,11 +84,23 @@ public class add_Info extends Fragment implements View.OnClickListener {
 
         uploadImageName = (EditText) v.findViewById(R.id.etUploadName);
 
-        spinner = (Spinner) v.findViewById(R.id.productType);
+        productType = (Spinner) v.findViewById(R.id.productType);
         String[] type = getResources().getStringArray(R.array.productType);
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.myspinner, type);
         adapter.setDropDownViewResource(R.layout.myspinner);
-        spinner.setAdapter(adapter);
+        productType.setAdapter(adapter);
+
+        productBrand = (Spinner) v.findViewById(R.id.productBrand);
+        String[] brand = getResources().getStringArray(R.array.epBrand);
+        ArrayAdapter brandAdapter = new ArrayAdapter(getActivity(), R.layout.myspinner, brand);
+        brandAdapter.setDropDownViewResource(R.layout.myspinner);
+        productBrand.setAdapter(brandAdapter);
+
+        productModel = (Spinner) v.findViewById(R.id.productModel);
+        String[] model = getResources().getStringArray(R.array.shureModel);
+        ArrayAdapter modelAdapter = new ArrayAdapter(getActivity(), R.layout.myspinner, model);
+        modelAdapter.setDropDownViewResource(R.layout.myspinner);
+        productModel.setAdapter(modelAdapter);
 
         rgroup = (RadioGroup) v.findViewById(R.id.rgroup);
         yesBtn = (RadioButton) v.findViewById(R.id.yesButton);

@@ -16,14 +16,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gadget_type"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorAccent" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/productType"
-            android:layout_width="wrap_content"
-            android:paddingTop="20dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:entries="@array/productType"></android.support.v7.widget.AppCompatSpinner>
+            android:entries="@array/productType"
+            android:paddingTop="20dp"></android.support.v7.widget.AppCompatSpinner>
+
+        <TextView
+            android:id="@+id/brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/brand"
+            android:textColor="@color/colorAccent" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/productBrand"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/epBrand"
+            android:paddingTop="20dp"></android.support.v7.widget.AppCompatSpinner>
+
+        <TextView
+            android:id="@+id/model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/model"
+            android:textColor="@color/colorAccent" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/productModel"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/shureModel"
+            android:paddingTop="20dp"></android.support.v7.widget.AppCompatSpinner>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -36,16 +64,16 @@
                 android:paddingTop="30dp"
                 android:text="@string/gadget_warranty"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <RadioGroup
                 android:id="@+id/rgroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/gwarranty"
-                android:paddingTop="10dp"
                 android:orientation="horizontal"
-                android:paddingLeft="30dp">
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp">
 
                 <RadioButton
                     android:id="@+id/noButton"
@@ -78,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/gadget_price"
                 android:paddingTop="20dp"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:inputType="numberDecimal"/>
         </android.support.design.widget.TextInputLayout>
 
         <RelativeLayout

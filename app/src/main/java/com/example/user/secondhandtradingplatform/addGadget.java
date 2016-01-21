@@ -1,5 +1,6 @@
 package com.example.user.secondhandtradingplatform;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import activity.Main;
 import tabs.add_Info;
 import tabs.add_location;
 
@@ -148,5 +150,12 @@ public class addGadget extends AppCompatActivity {
             }
             return null;
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent myIntent = new Intent(this, Main.class);
+        startActivity(myIntent);
+        finish();
     }
 }
