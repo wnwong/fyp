@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,8 @@ public class addGadget extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private String place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,5 +160,14 @@ public class addGadget extends AppCompatActivity {
         Intent myIntent = new Intent(this, Main.class);
         startActivity(myIntent);
         finish();
+    }
+
+    public void getLocation(String location){
+        place = location;
+        Log.i("custom_check", "location value in activity");
+        Log.i("custom_check", location);
+    }
+    public String provideLocation(){
+        return place;
     }
 }

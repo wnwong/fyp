@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.secondhandtradingplatform.R;
+import com.example.user.secondhandtradingplatform.addGadget;
 
 import org.w3c.dom.Text;
 
@@ -204,6 +205,9 @@ public class add_Info extends Fragment implements View.OnClickListener {
                 String brand = productBrand.getSelectedItem().toString();
                 String model = productModel.getSelectedItem().toString();
                 String price = gprice.getText().toString();
+                String location = ((addGadget) getActivity()).provideLocation();
+                Log.i("custom_check", "location value in activity");
+                Log.i("custom_check", location);
                 Bitmap image = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
                 new UploadImage(type, brand, model, warranty, price, image, uploadImageName.getText().toString()).execute();
                 break;
