@@ -8,17 +8,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="100dp"
         android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingTop="100dp">
 
         <TextView
             android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gadget_type"
-            android:textColor="@color/colorAccent" />
+            android:text="@string/gadget_type" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/productType"
@@ -31,8 +30,7 @@
             android:id="@+id/brand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/brand"
-            android:textColor="@color/colorAccent" />
+            android:text="@string/brand" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/productBrand"
@@ -45,8 +43,7 @@
             android:id="@+id/model"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/model"
-            android:textColor="@color/colorAccent" />
+            android:text="@string/model" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/productModel"
@@ -65,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="30dp"
                 android:text="@string/gadget_warranty"
-                android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
 
             <RadioGroup
@@ -107,9 +103,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/gadget_price"
+                android:inputType="numberDecimal"
                 android:paddingTop="20dp"
-                android:textColor="@color/colorPrimary"
-                android:inputType="numberDecimal"/>
+                android:textColor="@color/colorPrimary" />
         </android.support.design.widget.TextInputLayout>
 
         <RelativeLayout
