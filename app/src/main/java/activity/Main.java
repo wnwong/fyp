@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.user.secondhandtradingplatform.Add_Gadget_Activity;
 import com.example.user.secondhandtradingplatform.Login;
 import com.example.user.secondhandtradingplatform.R;
 import com.example.user.secondhandtradingplatform.Register;
@@ -33,17 +32,17 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import product.Camera;
-import product.earphone;
+import io.realm.Realm;
+import product.Earphone;
 import user.UserLocalStore;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     UserLocalStore userLocalStore;
+    private Realm realm;
     public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +53,8 @@ public class Main extends AppCompatActivity
         setSupportActionBar(toolbar);
         userLocalStore = new UserLocalStore(this);
         new loadAllProducts().execute();
+//       realm = Realm.getInstance(this);
+
         Fragment frag = new CameraFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -243,11 +244,13 @@ public class Main extends AppCompatActivity
                     sb.append(line + "\n");
                 }
                 String json = sb.toString();
+                //Parse JSON
                 JSONObject jObject = new JSONObject(json);
                 String gadget = jObject.getString("gadgets");
                 JSONArray gadgetArray = new JSONArray(gadget);
 
                 Log.i("loadGadget", gadget.toString());
+
                 for(int i=0; i< gadgetArray.length(); i++){
                     JSONObject obj = gadgetArray.getJSONObject(i);
                      int pid = obj.getInt("product_id");
@@ -257,8 +260,10 @@ public class Main extends AppCompatActivity
                      String price = obj.getString("price");
                      String location = obj.getString("location");
                      String image = null;
-                    Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location);
-            //         earphone ep = new earphone(pid, brand, model, warranty, price, location, image);
+                     Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location);
+
+                    //insert into realm
+        //             createEntry(realm, pid, brand, model, warranty, price, location);
                 }
                 reader.close();
                 con.disconnect();
@@ -275,4 +280,19 @@ public class Main extends AppCompatActivity
         }
     }
 
+    private void createEntry(Realm realm, int pid, String brand, String model, String warranty, String price, String location){
+        realm.beginTransaction();
+        Earphone earphone = realm.createObject(Earphone.class);
+        earphone.setBrand(brand);
+        earphone.setLocation(location);
+        earphone.setModel(model);
+        earphone.setPid(pid);
+        earphone.setPrice(price);
+        realm.commitTransaction();
+
+        Earphone ep = realm.where(Earphone.class).findFirst();
+        Log.i("loadGadget", "The first gadget:");
+        Log.i("loadGadget", ep.getBrand() + " " +ep.getModel());
+
+    }
 }
