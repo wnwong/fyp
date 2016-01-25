@@ -36,7 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import io.realm.Realm;
-import product.Earphone;
+import product.earphone;
 import user.UserLocalStore;
 
 public class Main extends AppCompatActivity
@@ -282,7 +282,7 @@ public class Main extends AppCompatActivity
 
     private void createEntry(Realm realm, int pid, String brand, String model, String warranty, String price, String location){
         realm.beginTransaction();
-        Earphone earphone = realm.createObject(Earphone.class);
+        earphone earphone = realm.createObject(earphone.class);
         earphone.setBrand(brand);
         earphone.setLocation(location);
         earphone.setModel(model);
@@ -290,7 +290,7 @@ public class Main extends AppCompatActivity
         earphone.setPrice(price);
         realm.commitTransaction();
 
-        Earphone ep = realm.where(Earphone.class).findFirst();
+        earphone ep = realm.where(earphone.class).findFirst();
         Log.i("loadGadget", "The first gadget:");
         Log.i("loadGadget", ep.getBrand() + " " +ep.getModel());
 
