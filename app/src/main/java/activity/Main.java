@@ -28,6 +28,9 @@ import com.example.user.secondhandtradingplatform.R;
 import com.example.user.secondhandtradingplatform.Register;
 import com.example.user.secondhandtradingplatform.addGadget;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -219,7 +222,7 @@ public class Main extends AppCompatActivity
     }
 
     public  class loadAllProducts extends AsyncTask<Void, Void, Void>{
-
+        JSONArray product = null;
         public loadAllProducts() {
         }
 
@@ -233,10 +236,23 @@ public class Main extends AppCompatActivity
                 con.setDoInput(true);
                 Log.i("loadGadget", "Start Reading from Server");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.i("loadGadget", "JSON Response when loading gadgets ");
-                    Log.i("loadGadget", line);
+
+                    sb.append(line + "\n");
+                }
+                String json = sb.toString();
+                Log.i("loadGadget", "JSON Response when loading gadgets ");
+                Log.i("loadGadget", json);
+                JSONObject jObject = new JSONObject(json);
+
+                product = jObject.getJSONArray("gedgets");
+                Log.i("loadGadget", product.toString());
+                for(int i=0; i<product.length();i++){
+                    Log.i("loadGadget", "for loop");
+                    JSONObject Object = product.getJSONObject(i);
+                    Log.i("loadGadget", Object.getString("product_id") + " " + Object.getString("brand") + " " + Object.getString("model"));
                 }
                 reader.close();
                 con.disconnect();
