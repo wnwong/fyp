@@ -29,6 +29,8 @@ public class Camera extends Product {
         this.phonNo = phonNo;
         this.email = email;
     }
+
+
     public void add(Camera camera){
 
         cameras.add(camera);

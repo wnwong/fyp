@@ -12,7 +12,7 @@ public class earphone extends RealmObject {
     private String warranty;
     private String price;
     private String location;
-    private String image;
+
 
     public int getPid() {
         return pid;
@@ -62,11 +62,4 @@ public class earphone extends RealmObject {
         this.location = location;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

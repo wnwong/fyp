@@ -37,6 +37,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import product.Camera;
+import product.earphone;
 import user.UserLocalStore;
 
 public class Main extends AppCompatActivity
@@ -231,7 +233,6 @@ public class Main extends AppCompatActivity
             try {
                 URL url = new URL(SERVER_ADDRESS + "retrieveGadget.php");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                Log.i("loadGadget", "HTTP connection opened!!");
                 con.setRequestMethod("POST");
                 con.setDoInput(true);
                 Log.i("loadGadget", "Start Reading from Server");
@@ -248,8 +249,16 @@ public class Main extends AppCompatActivity
 
                 Log.i("loadGadget", gadget.toString());
                 for(int i=0; i< gadgetArray.length(); i++){
-                    JSONObject Object = gadgetArray.getJSONObject(i);
-                    Log.i("loadGadget", Object.getString("product_id") + " " + Object.getString("brand") + " " + Object.getString("model"));
+                    JSONObject obj = gadgetArray.getJSONObject(i);
+                     int pid = obj.getInt("product_id");
+                     String brand = obj.getString("brand");
+                     String model =  obj.getString("model");
+                     String warranty = obj.getString("warranty");
+                     String price = obj.getString("price");
+                     String location = obj.getString("location");
+                     String image = null;
+                    Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location);
+            //         earphone ep = new earphone(pid, brand, model, warranty, price, location, image);
                 }
                 reader.close();
                 con.disconnect();
