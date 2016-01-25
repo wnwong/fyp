@@ -222,7 +222,7 @@ public class Main extends AppCompatActivity
     }
 
     public  class loadAllProducts extends AsyncTask<Void, Void, Void>{
-        JSONArray product = null;
+
         public loadAllProducts() {
         }
 
@@ -239,19 +239,16 @@ public class Main extends AppCompatActivity
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
-
                     sb.append(line + "\n");
                 }
                 String json = sb.toString();
-                Log.i("loadGadget", "JSON Response when loading gadgets ");
-                Log.i("loadGadget", json);
                 JSONObject jObject = new JSONObject(json);
+                String gadget = jObject.getString("gadgets");
+                JSONArray gadgetArray = new JSONArray(gadget);
 
-                product = jObject.getJSONArray("gedgets");
-                Log.i("loadGadget", product.toString());
-                for(int i=0; i<product.length();i++){
-                    Log.i("loadGadget", "for loop");
-                    JSONObject Object = product.getJSONObject(i);
+                Log.i("loadGadget", gadget.toString());
+                for(int i=0; i< gadgetArray.length(); i++){
+                    JSONObject Object = gadgetArray.getJSONObject(i);
                     Log.i("loadGadget", Object.getString("product_id") + " " + Object.getString("brand") + " " + Object.getString("model"));
                 }
                 reader.close();
