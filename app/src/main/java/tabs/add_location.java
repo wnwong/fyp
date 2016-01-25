@@ -18,7 +18,7 @@ import com.example.user.secondhandtradingplatform.addGadget;
 
 public class add_location extends Fragment implements View.OnClickListener {
     Button confirm;
-    EditText location;
+    String location;
     ListView menuList, detailList;
     ArrayAdapter<String> menuAdapter, detailAdapter;
 
@@ -27,7 +27,7 @@ public class add_location extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         View v = getView();
 //        location = (EditText) v.findViewById(R.id.location);
-//        confirm = (Button) v.findViewById(R.id.confirmBtn);
+        confirm = (Button) v.findViewById(R.id.confirmBtn);
 //        confirm.setOnClickListener(this);
         menuList = (ListView) v.findViewById(R.id.menuList);
         detailList = (ListView) v.findViewById(R.id.detailList);
@@ -64,7 +64,13 @@ public class add_location extends Fragment implements View.OnClickListener {
                 }
             }
         });
-
+ /*       detailList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                location = parent.getItemAtPosition(position).toString();
+            }
+        });
+*/
     }
 
     @Nullable
@@ -78,10 +84,14 @@ public class add_location extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.confirmBtn:
-//                ((addGadget) getActivity()).getLocation(location.getText().toString());
-//                break;
+ /*           case R.id.confirmBtn:
+                if(location != null)
+                {
+                    ((addGadget) getActivity()).getLocation(location);
+                }
+                break;
         }
-
+*/
+        }
     }
 }
