@@ -200,9 +200,10 @@ public class ServerRequests {
                          email = jObject.getString("email");
                          location = jObject.getString("location");
                          gender = jObject.getString("gender");
+                        int user_id = jObject.getInt("user_id");
                     Log.i("custom_check", "the parsed JSON info are as follows:");
-                    Log.i("custom_check", email + " " + location + " " +gender);
-                    returnedUser = new User(user.getUsername(), user.getPassword(), email, location, gender);
+                    Log.i("custom_check", user_id + " " + email + " " + location + " " +gender);
+                    returnedUser = new User(user_id, user.getUsername(), user.getPassword(), email, location, gender);
                     reader.close();
                 }
             }catch(Exception e){
