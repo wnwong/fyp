@@ -259,8 +259,9 @@ public class Main extends AppCompatActivity
                      String warranty = obj.getString("warranty");
                      String price = obj.getString("price");
                      String location = obj.getString("location");
-                     String image = null;
-                     Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location);
+                    //Base64 encoded gadget image
+                     String image =  obj.getString("path");
+                     Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location + " " +image);
 
                     //insert into realm
         //             createEntry(realm, pid, brand, model, warranty, price, location);
