@@ -284,11 +284,6 @@ public class add_Info extends Fragment implements View.OnClickListener {
             byte[] array = byteArrayOutputStream.toByteArray();
             String encodeImage = Base64.encodeToString(array, Base64.DEFAULT);
 
-            Map<String, String> dataToSend = new HashMap<>();
-            dataToSend.put("image", encodeImage);
-            dataToSend.put("name", name);
-            dataToSend.put("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
-            System.out.println(dataToSend.toString());
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("type", type )
                     .appendQueryParameter("brand", brand)
