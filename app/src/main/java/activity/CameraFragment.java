@@ -1,34 +1,35 @@
 package activity;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-        import android.support.v4.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
 
-        import com.example.user.secondhandtradingplatform.R;
+import com.example.user.secondhandtradingplatform.DetailPageActivity;
+import com.example.user.secondhandtradingplatform.R;
 
-import org.json.JSONObject;
+import java.util.List;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
-
+import adapter.passToDetailPageListener;
 import product.Camera;
 import adapter.RVAdapter;
+import java.io.Serializable;
+import java.util.Objects;
 
 
-public class CameraFragment extends Fragment{
-    public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
+public class CameraFragment extends Fragment implements passToDetailPageListener {
 
+public static Context context;
+   public static  Handler mHandler;
+    List<Camera> cameras;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -40,18 +41,53 @@ public class CameraFragment extends Fragment{
         //use a linear layout manager
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
+
+        context = getContext();
+        System.out.println("run to here");
+
+          mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch(msg.what){
+                    case 1:
+                        //處理少量資訊或UI
+                   System.out.println("Form past page");
+                        Integer position = (Integer)msg.obj;
+                        Camera obj = cameras.get(position);
+                        DetailPageActivity.camera = obj;
+
+                        System.out.println(obj.name);
+//                        Object anyobject = obj;
+                        Intent intent = new Intent(context, DetailPageActivity.class);
+
+//                        Bundle extras = new Bundle();
+//                        extras.se
+                        startActivity(intent);
+
+                        break;
+                }
+            }
+        };  // pass the object date to detailPage
+
+//        Intent intent = new Intent(this.getContext(), DetailPageActivity.class);
+//        startActivity(intent);
+
+
+
+
 /**********************************************************************************************/
   //testing
-        Camera cam = new Camera("Canon PowerShot G7 X", "2500","Yes", "MongKok", R.mipmap.ic_g7);
-        Camera cam1 = new Camera("Canon EOS 7D Mark II", "4300", "Yes", "Causeway Bay", R.mipmap.ic_7d);
-        Camera cam2 = new Camera("Canon EOS 760D", "5000", "No", "HongKongIsland", R.mipmap.ic_760d);
+        Camera cam = new Camera("Canon PowerShot G7 X", "2500","Yes", "MongKok", R.mipmap.ic_g7, "philip", "1000","999","Gmail");
+        Camera cam1 = new Camera("Canon EOS 7D Mark II", "4300", "Yes", "Causeway Bay", R.mipmap.ic_7d,"philip", "2000","999","Gmail");
+        Camera cam2 = new Camera("Canon EOS 760D", "5000", "No", "HongKongIsland", R.mipmap.ic_760d,"philip", "3000","999","Gmail");
         cam.add(cam);
         cam1.add(cam1);
         cam2.add(cam2);
+        cameras = Camera.cameras;
+
 /**********************************************************************************************/
         RVAdapter adapter = new RVAdapter(Camera.get(), R.layout.cardview);
         rv.setAdapter(adapter);
-//        retrieveGadget();
     }
 
     @Override
@@ -74,37 +110,13 @@ public class CameraFragment extends Fragment{
         super.onDetach();
     }
 
-    private class retrieveGadget extends AsyncTask<Void, Void, Camera>{
 
-        @Override
-        protected Camera doInBackground(Void... params) {
+    @Override
+    public void passToDetail() {
+        System.out.println("tseting to listener");
+//        Message message = new Message();
+//        message.what = 1;
+//        mHandler.sendMessage(message);
 
-            try{
-                URL url = new URL(SERVER_ADDRESS + "retrieveGadget.php");
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setRequestMethod("POST");
-                con.setDoInput(true);
-                con.setDoOutput(true);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String line;
-                StringBuilder sb = new StringBuilder();
-                while((line = reader.readLine()) != null){
-                    sb.append(line + "\n");
-                }
-                Log.i("custon_check", "The retrieved gadgets:");
-                Log.i("custon_check", sb.toString());
-
-                JSONObject jObject = new JSONObject(sb.toString());
-
-            }catch(Exception e){
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Camera camera) {
-            super.onPostExecute(camera);
-        }
     }
 }

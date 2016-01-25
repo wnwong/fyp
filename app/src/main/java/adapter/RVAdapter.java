@@ -1,21 +1,31 @@
 package adapter;
 
 
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.user.secondhandtradingplatform.DetailPageActivity;
 import com.example.user.secondhandtradingplatform.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import activity.CameraFragment;
 import product.Camera;
+
+import static android.support.v4.app.ActivityCompat.startActivity;
+
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CameraViewHolder>{
 
@@ -52,7 +62,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CameraViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(CameraViewHolder holder, int position) {
+    public void onBindViewHolder(CameraViewHolder holder, final int position) {
         // Get the list of product
         Camera camera =cameras.get(position);
 
@@ -62,6 +72,34 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.CameraViewHolder>{
         holder.warranty.setText(camera.warranty);
         holder.place.setText(camera.place);
         holder.photo.setImageResource(camera.photoid);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                System.out.println("tseting to click");
+                System.out.println("position: " + position);
+//                Context context = CameraFragment.context;
+                passToDetailPageListener pass = new CameraFragment();
+                pass.passToDetail();
+
+                Message message = new Message();
+                message.obj = new Integer(position);
+                message.what = 1;
+                CameraFragment.mHandler.sendMessage(message);
+
+
+
+
+
+
+
+            }
+
+
+
+
+        });
 
 
     }
