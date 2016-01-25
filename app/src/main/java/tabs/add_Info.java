@@ -312,6 +312,7 @@ public class add_Info extends Fragment implements View.OnClickListener {
                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    Log.i("custom_check", "Server Response when uploading items");
                     Log.i("custom_check", line);
                 }
                 writer.close();
