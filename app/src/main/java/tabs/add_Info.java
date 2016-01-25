@@ -295,7 +295,8 @@ public class add_Info extends Fragment implements View.OnClickListener {
                     .appendQueryParameter("user_id", String.valueOf(userLocalStore.getLoggedInUser().getUser_id()));
             String query = builder.build().getEncodedQuery();
 
-            System.out.println(query);
+            Log.i("custom_check","The encoded query:");
+            Log.i("custom_check", query);
             try {
                 URL url = new URL(SERVER_ADDRESS + "SavePicture.php");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
