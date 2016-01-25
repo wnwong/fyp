@@ -3,11 +3,13 @@ package activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,11 +28,18 @@ import com.example.user.secondhandtradingplatform.R;
 import com.example.user.secondhandtradingplatform.Register;
 import com.example.user.secondhandtradingplatform.addGadget;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import user.UserLocalStore;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     UserLocalStore userLocalStore;
+    public static final String SERVER_ADDRESS = "http://php-etrading.rhcloud.com/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,9 +47,8 @@ public class Main extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         userLocalStore = new UserLocalStore(this);
-
+        new loadAllProducts().execute();
         Fragment frag = new CameraFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -208,6 +216,41 @@ public class Main extends AppCompatActivity
             }
         });
         dialogBuilder.show();
+    }
+
+    public  class loadAllProducts extends AsyncTask<Void, Void, Void>{
+
+        public loadAllProducts() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                URL url = new URL(SERVER_ADDRESS + "retrieveGadget.php");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                Log.i("loadGadget", "HTTP connection opened!!");
+                con.setRequestMethod("POST");
+                con.setDoInput(true);
+                Log.i("loadGadget", "Start Reading from Server");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    Log.i("loadGadget", "JSON Response when loading gadgets ");
+                    Log.i("loadGadget", line);
+                }
+                reader.close();
+                con.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+        }
     }
 
 }
