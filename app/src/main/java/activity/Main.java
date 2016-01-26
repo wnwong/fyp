@@ -53,7 +53,7 @@ public class Main extends AppCompatActivity
         setSupportActionBar(toolbar);
         userLocalStore = new UserLocalStore(this);
         new loadAllProducts().execute();
-//       realm = Realm.getInstance(this);
+
 
         Fragment frag = new CameraFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -259,12 +259,14 @@ public class Main extends AppCompatActivity
                      String warranty = obj.getString("warranty");
                      String price = obj.getString("price");
                      String location = obj.getString("location");
+                     String type = obj.getString("type");
                     //Base64 encoded gadget image
                      String image =  obj.getString("path");
                      Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location + " " +image);
-
+                    realm = Realm.getInstance(getApplicationContext());
                     //insert into realm
-        //             createEntry(realm, pid, brand, model, warranty, price, location);
+                    createEarphoneEntry(realm, pid, brand, model, warranty, price, location);
+                  //  clearDB(realm);
                 }
                 reader.close();
                 con.disconnect();
@@ -281,19 +283,25 @@ public class Main extends AppCompatActivity
         }
     }
 
-    private void createEntry(Realm realm, int pid, String brand, String model, String warranty, String price, String location){
+    private void createEarphoneEntry(Realm realm, int pid, String brand, String model, String warranty, String price, String location){
         realm.beginTransaction();
-        earphone earphone = realm.createObject(earphone.class);
-        earphone.setBrand(brand);
-        earphone.setLocation(location);
-        earphone.setModel(model);
-        earphone.setPid(pid);
-        earphone.setPrice(price);
+        earphone ep = realm.createObject(earphone.class);
+        ep.setPid(pid);
+        ep.setBrand(brand);
+        ep.setModel(model);
+        ep.setWarranty(warranty);
+        ep.setPrice(price);
+        ep.setLocation(location);
         realm.commitTransaction();
 
-        earphone ep = realm.where(earphone.class).findFirst();
+  //      earphone ep1 = realm.where(earphone.class).findFirst();
         Log.i("loadGadget", "The first gadget:");
         Log.i("loadGadget", ep.getBrand() + " " +ep.getModel());
 
+    }
+    private void clearDB(Realm realm){
+        realm.beginTransaction();
+        realm.allObjects(earphone.class).clear();
+        realm.commitTransaction();
     }
 }

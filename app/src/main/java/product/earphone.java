@@ -5,7 +5,7 @@ import io.realm.annotations.PrimaryKey;
 
 
 public class earphone extends RealmObject {
-    @PrimaryKey
+
     private int pid;
     private String brand;
     private String model;
@@ -13,6 +13,18 @@ public class earphone extends RealmObject {
     private String price;
     private String location;
 
+
+
+    public earphone(){}
+
+    public earphone(int pid, String brand, String model, String warranty, String price, String location) {
+        this.pid = pid;
+        this.brand = brand;
+        this.model = model;
+        this.warranty = warranty;
+        this.price = price;
+        this.location = location;
+    }
 
     public int getPid() {
         return pid;
