@@ -12,18 +12,20 @@ public class earphone extends RealmObject {
     private String warranty;
     private String price;
     private String location;
+    private String image;
 
 
 
     public earphone(){}
 
-    public earphone(int pid, String brand, String model, String warranty, String price, String location) {
+    public earphone(int pid, String brand, String model, String warranty, String price, String location,String image) {
         this.pid = pid;
         this.brand = brand;
         this.model = model;
         this.warranty = warranty;
         this.price = price;
         this.location = location;
+        this.image = image;
     }
 
     public int getPid() {
@@ -74,4 +76,11 @@ public class earphone extends RealmObject {
         this.location = location;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

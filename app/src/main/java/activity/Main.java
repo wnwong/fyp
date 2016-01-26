@@ -36,6 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import product.earphone;
 import user.UserLocalStore;
 
@@ -265,9 +266,11 @@ public class Main extends AppCompatActivity
                     //Base64 encoded gadget image
                      String image =  obj.getString("path");
                      Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location + " " +image);
-
+                    if(type.equals("earphone"))
                     //insert into realm
-                    createEarphoneEntry(realm, pid, brand, model, warranty, price, location);
+                    {
+                        createEarphoneEntry(realm, pid, brand, model, warranty, price, location, image);
+                    }
                   //  clearDB(realm);
                 }
                 reader.close();
@@ -286,7 +289,7 @@ public class Main extends AppCompatActivity
         }
     }
 
-    private void createEarphoneEntry(Realm realm, int pid, String brand, String model, String warranty, String price, String location){
+    private void createEarphoneEntry(Realm realm, int pid, String brand, String model, String warranty, String price, String location, String image){
         realm.beginTransaction();
         earphone ep = realm.createObject(earphone.class);
         ep.setPid(pid);
@@ -295,6 +298,7 @@ public class Main extends AppCompatActivity
         ep.setWarranty(warranty);
         ep.setPrice(price);
         ep.setLocation(location);
+        ep.setImage(image);
         realm.commitTransaction();
 
   //      earphone ep1 = realm.where(earphone.class).findFirst();
