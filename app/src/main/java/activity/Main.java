@@ -270,6 +270,7 @@ public class Main extends AppCompatActivity
                 }
                 reader.close();
                 con.disconnect();
+                realm.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
