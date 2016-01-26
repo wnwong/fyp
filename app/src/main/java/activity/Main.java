@@ -231,6 +231,8 @@ public class Main extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
+            realm = Realm.getInstance(getApplicationContext());
+            clearDB(realm);
             try {
                 URL url = new URL(SERVER_ADDRESS + "retrieveGadget.php");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -263,7 +265,7 @@ public class Main extends AppCompatActivity
                     //Base64 encoded gadget image
                      String image =  obj.getString("path");
                      Log.i("loadGadget", pid + " " + brand + " " + model + " " + warranty + " " +price + " " +location + " " +image);
-                    realm = Realm.getInstance(getApplicationContext());
+
                     //insert into realm
                     createEarphoneEntry(realm, pid, brand, model, warranty, price, location);
                   //  clearDB(realm);
@@ -296,7 +298,7 @@ public class Main extends AppCompatActivity
         realm.commitTransaction();
 
   //      earphone ep1 = realm.where(earphone.class).findFirst();
-        Log.i("loadGadget", "The first gadget:");
+        Log.i("loadGadget", "The inserted gadget:");
         Log.i("loadGadget", ep.getBrand() + " " +ep.getModel());
 
     }
